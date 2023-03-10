@@ -15,15 +15,13 @@ if( isset( $_POST['title'] ) )
     $query = 'INSERT INTO projects (
         title,
         content,
-        date,
-        type,
-        url
+        url,
+        github
       ) VALUES (
          "'.mysqli_real_escape_string( $connect, $_POST['title'] ).'",
          "'.mysqli_real_escape_string( $connect, $_POST['content'] ).'",
-         "'.mysqli_real_escape_string( $connect, $_POST['date'] ).'",
-         "'.mysqli_real_escape_string( $connect, $_POST['type'] ).'",
-         "'.mysqli_real_escape_string( $connect, $_POST['url'] ).'"
+         "'.mysqli_real_escape_string( $connect, $_POST['url'] ).'",
+         "'.mysqli_real_escape_string( $connect, $_POST['github'] ).'"
       )';
     mysqli_query( $connect, $query );
     
@@ -72,25 +70,8 @@ include( 'includes/header.php' );
   
   <br>
   
-  <label for="date">Date:</label>
-  <input type="date" name="date" id="date">
-  
-  <br>
-  
-  <label for="type">Type:</label>
-  <?php
-  
-  $values = array( 'Website', 'Graphic Design' );
-  
-  echo '<select name="type" id="type">';
-  foreach( $values as $key => $value )
-  {
-    echo '<option value="'.$value.'"';
-    echo '>'.$value.'</option>';
-  }
-  echo '</select>';
-  
-  ?>
+  <label for="url">GitHub:</label>
+  <input type="text" name="github" id="github">
   
   <br>
   

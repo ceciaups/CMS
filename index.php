@@ -27,8 +27,7 @@ include( 'admin/includes/functions.php' );
   <?php
 
   $query = 'SELECT *
-    FROM projects
-    ORDER BY date DESC';
+    FROM projects';
   $result = mysqli_query( $connect, $query );
 
   ?>
