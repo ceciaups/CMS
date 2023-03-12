@@ -23,8 +23,10 @@ if( isset( $_GET['delete'] ) )
 
 include( 'includes/header.php' );
 
-$query = 'SELECT *
-  FROM projects';
+$query = 'SELECT p.id, p.user_id, p.title, p.content, p.photo
+  '.( ( $_SESSION['id'] != 1 ) ? '' : ', u.first, u.last' ).'
+  FROM projects p
+  '.( ( $_SESSION['id'] != 1 ) ? 'WHERE user_id = '.$_SESSION['id'].' ' : 'LEFT JOIN users u ON p.user_id = u.id' );
 $result = mysqli_query( $connect, $query );
 
 ?>
@@ -33,22 +35,29 @@ $result = mysqli_query( $connect, $query );
 
 <table>
   <tr>
-    <th></th>
     <th align="center">ID</th>
-    <th align="left">Title</th>
+    <?php 
+      if ( $_SESSION['id'] == 1 ) {
+        echo '<th align="center">User</th>';
+      }
+    ?>
+    <th align="left">Description</th>
     <th></th>
     <th></th>
     <th></th>
   </tr>
   <?php while( $record = mysqli_fetch_assoc( $result ) ): ?>
     <tr>
-      <td align="center">
-        <img src="image.php?type=project&id=<?php echo $record['id']; ?>&width=300&height=300&format=inside">
-      </td>
       <td align="center"><?php echo $record['id']; ?></td>
+      <?php 
+      if ( $_SESSION['id'] == 1 ) {
+        echo '<td align="center">'.$record['first'].' '.$record['last'].'</td>';
+      }
+    ?>
       <td align="left">
         <?php echo htmlentities( $record['title'] ); ?>
         <small><?php echo $record['content']; ?></small>
+        <img src="image.php?type=project&id=<?php echo $record['id']; ?>&width=300&height=300&format=inside">
       </td>
       <td align="center"><a href="projects_photo.php?id=<?php echo $record['id']; ?>">Photo</i></a></td>
       <td align="center"><a href="projects_edit.php?id=<?php echo $record['id']; ?>">Edit</i></a></td>

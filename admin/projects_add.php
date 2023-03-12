@@ -13,11 +13,13 @@ if( isset( $_POST['title'] ) )
   {
     
     $query = 'INSERT INTO projects (
+        user_id,
         title,
         content,
         url,
         github
       ) VALUES (
+         "'.( ( $_SESSION['id'] != 1 ) ? mysqli_real_escape_string( $connect, $_SESSION['id']) : mysqli_real_escape_string( $connect, $_POST['user']) ).'",
          "'.mysqli_real_escape_string( $connect, $_POST['title'] ).'",
          "'.mysqli_real_escape_string( $connect, $_POST['content'] ).'",
          "'.mysqli_real_escape_string( $connect, $_POST['url'] ).'",
@@ -36,12 +38,35 @@ if( isset( $_POST['title'] ) )
 
 include( 'includes/header.php' );
 
+if ( $_SESSION['id'] == 1 ) {
+  $query = 'SELECT *
+    FROM users';
+  $result = mysqli_query( $connect, $query );
+}
+
 ?>
 
 <h2>Add Project</h2>
 
 <form method="post">
   
+  <?php
+
+  if ( $_SESSION['id'] == 1 ) {
+    echo '<label for="type">User:</label>';
+    echo '<select name="user" id="user">';
+    while( $record = mysqli_fetch_assoc( $result ) ):
+      if ($record['id'] != 1) {
+        echo '<option value="'.$record['id'].'"';
+        echo '>'.$record['first'].' '.$record['last'].'</option>';
+      }
+    endwhile;
+    echo '</select>';
+    echo '<br>';
+  }
+  
+  ?>
+
   <label for="title">Title:</label>
   <input type="text" name="title" id="title">
     
@@ -70,7 +95,7 @@ include( 'includes/header.php' );
   
   <br>
   
-  <label for="url">GitHub:</label>
+  <label for="github">GitHub:</label>
   <input type="text" name="github" id="github">
   
   <br>

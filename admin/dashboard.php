@@ -8,6 +8,8 @@ secure();
 
 include( 'includes/header.php' );
 
+echo '<p align="center">Welcome back '.$_SESSION['name'].'!</p>';
+
 ?>
 
 <ul id="dashboard">

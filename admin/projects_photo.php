@@ -100,20 +100,16 @@ include 'includes/wideimage/WideImage.php';
 
 <h2>Edit Project</h2>
 
-<p>
-  Note: For best results, photos should be approximately 800 x 800 pixels.
-</p>
-
 <?php if( $record['photo'] ): ?>
 
   <?php
 
   $data = base64_decode( explode( ',', $record['photo'] )[1] );
   $img = WideImage::loadFromString( $data );
-  $data = $img->resize( 200, 200, 'outside' )->crop( 'center', 'center', 200, 200 )->asString( 'jpg', 70 );
+  $data = $img->asString( 'jpg', 70 );
 
   ?>
-  <p><img src="data:image/jpg;base64,<?php echo base64_encode( $data ); ?>" width="200" height="200"></p>
+  <p><img src="data:image/jpg;base64,<?php echo base64_encode( $data ); ?>" width="500" height="300"></p>
   <p><a href="projects_photo.php?id=<?php echo $_GET['id']; ?>&delete"><i class="fas fa-trash-alt"></i> Delete this Photo</a></p>
 
 <?php endif; ?>

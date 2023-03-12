@@ -22,6 +22,7 @@ if( isset( $_POST['email'] ) )
     
     $_SESSION['id'] = $record['id'];
     $_SESSION['email'] = $record['email'];
+    $_SESSION['name'] = $record['first']." ".$record['last'];
     
     header( 'Location: dashboard.php' );
     die();
