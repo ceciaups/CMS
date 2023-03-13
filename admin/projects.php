@@ -50,10 +50,10 @@ $result = mysqli_query( $connect, $query );
     <tr>
       <td align="center"><?php echo $record['id']; ?></td>
       <?php 
-      if ( $_SESSION['id'] == 1 ) {
-        echo '<td align="center">'.$record['first'].' '.$record['last'].'</td>';
-      }
-    ?>
+        if ( $_SESSION['id'] == 1 ) {
+          echo '<td align="center">'.$record['first'].' '.$record['last'].'</td>';
+        }
+      ?>
       <td align="left">
         <?php echo htmlentities( $record['title'] ); ?>
         <small><?php echo $record['content']; ?></small>
