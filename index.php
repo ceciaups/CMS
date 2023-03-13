@@ -47,7 +47,7 @@ include( 'admin/includes/functions.php' );
 
         <p>The image can be inserted using a base64 image:</p>
 
-        <img src="<?php echo $record['photo']; ?>">
+        <img src="<?php echo $record['photo']; ?>" width="500" height="300">
 
         <p>Or by streaming the image through the image.php file:</p>
 

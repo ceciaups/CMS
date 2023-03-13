@@ -21,8 +21,8 @@ if( isset( $_POST['name'] ) )
   {
     
     $query = 'UPDATE skills SET
+      user_id = "'.( ( $_SESSION['id'] != 1 ) ? mysqli_real_escape_string( $connect, $_SESSION['id']) : mysqli_real_escape_string( $connect, $_POST['user']) ).'",
       name = "'.mysqli_real_escape_string( $connect, $_POST['name'] ).'",
-      url = "'.mysqli_real_escape_string( $connect, $_POST['url'] ).'",
       percent = "'.mysqli_real_escape_string( $connect, $_POST['percent'] ).'"
       WHERE id = '.$_GET['id'].'
       LIMIT 1';
@@ -61,19 +61,40 @@ if( isset( $_GET['id'] ) )
 
 include( 'includes/header.php' );
 
+if ( $_SESSION['id'] == 1 ) {
+  $query_user = 'SELECT *
+    FROM users';
+  $result_user = mysqli_query( $connect, $query_user );
+}
+
 ?>
 
-<h2>Edit Project</h2>
+<h2>Edit Skill</h2>
 
 <form method="post">
   
+  <?php
+
+  if ( $_SESSION['id'] == 1 ) {
+    echo '<label for="type">User:</label>';
+    echo '<select name="user" id="user">';
+    while( $record_user = mysqli_fetch_assoc( $result_user ) ):
+      if ($record_user['id'] != 1) {
+        echo '<option value="'.$record_user['id'].'"';
+        if ( $record['user_id'] == $record_user['id'] ) {
+          echo ' selected';
+        }
+        echo '>'.$record_user['first'].' '.$record_user['last'].'</option>';
+      }
+    endwhile;
+    echo '</select>';
+    echo '<br>';
+  }
+
+  ?>
+
   <label for="name">Name:</label>
   <input type="text" name="name" id="name" value="<?php echo htmlentities( $record['name'] ); ?>">
-    
-  <br>
-  
-  <label for="url">URL:</label>
-  <input type="text" name="url" id="url" value="<?php echo htmlentities( $record['url'] ); ?>">
     
   <br>
   
@@ -86,7 +107,7 @@ include( 'includes/header.php' );
   
 </form>
 
-<p><a href="skills.php"><i class="fas fa-arrow-circle-left"></i> Return to Project List</a></p>
+<p><a href="skills.php"><i class="fas fa-arrow-circle-left"></i> Return to Skill List</a></p>
 
 
 <?php
