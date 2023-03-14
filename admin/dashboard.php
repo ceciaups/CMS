@@ -29,6 +29,11 @@ echo '<p align="center">Welcome back '.$_SESSION['name'].'!</p>';
     </a>
   </li>
   <li>
+    <a href="career.php">
+      Manage Career
+    </a>
+  </li>
+  <li>
     <a href="logout.php">
       Logout
     </a>

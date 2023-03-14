@@ -31,6 +31,8 @@ $result = mysqli_query( $connect, $query );
 
 ?>
 
+<script src="includes/functions.js"></script>
+
 <h2>Manage Skill</h2>
 
 <table>
@@ -66,7 +68,11 @@ $result = mysqli_query( $connect, $query );
       <td align="center"><a href="skills_photo.php?id=<?php echo $record['id']; ?>">Photo</i></a></td>
       <td align="center"><a href="skills_edit.php?id=<?php echo $record['id']; ?>">Edit</i></a></td>
       <td align="center">
-        <a href="skills.php?delete=<?php echo $record['id']; ?>" onclick="javascript:confirm('Are you sure you want to delete this skill?');">Delete</i></a>
+        <?php
+
+        echo '<a href="skills.php?delete='.$record['id'].'" onclick="confirmDelete('."'skill'".')">Delete</i></a>';
+
+        ?>
       </td>
     </tr>
   <?php endwhile; ?>
