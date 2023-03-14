@@ -34,6 +34,8 @@ $result = mysqli_query( $connect, $query );
 
 ?>
 
+<script src="includes/functions.js"></script>
+
 <h2>Manage Projects</h2>
 
 <table>
@@ -74,7 +76,11 @@ $result = mysqli_query( $connect, $query );
       </td>
       <td align="center"><a href="projects_edit.php?id=<?php echo $record['id']; ?>">Edit</i></a></td>
       <td align="center">
-        <a href="projects.php?delete=<?php echo $record['id']; ?>" onclick="javascript:confirm('Are you sure you want to delete this project?');">Delete</i></a>
+        <?php
+
+        echo '<a href="projects.php?delete='.$record['id'].'" onclick="confirmDelete('."'project'".')">Delete</i></a>';
+
+        ?>
       </td>
     </tr>
   <?php endwhile; ?>

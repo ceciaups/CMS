@@ -74,7 +74,7 @@ else {
   <?php
 
   if ( $_SESSION['id'] == 1 ) {
-    echo '<label for="type">User:</label>';
+    echo '<label for="user">User:</label>';
     echo '<select name="user" id="user">';
     while( $record = mysqli_fetch_assoc( $result ) ):
       if ($record['id'] != 1) {
