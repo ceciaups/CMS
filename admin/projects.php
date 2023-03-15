@@ -23,10 +23,13 @@ if( isset( $_GET['delete'] ) )
 
 include( 'includes/header.php' );
 
-$query = 'SELECT p.id, p.user_id, p.title, p.content, p.photo
+$query = 'SELECT p.id, p.user_id, p.title, p.content, p.photo, GROUP_CONCAT(s.name SEPARATOR ", ") AS skills
   '.( ( $_SESSION['id'] != 1 ) ? '' : ', u.first, u.last' ).'
   FROM projects p
-  '.( ( $_SESSION['id'] != 1 ) ? 'WHERE user_id = '.$_SESSION['id'].' ' : 'LEFT JOIN users u ON p.user_id = u.id' );
+  LEFT JOIN projects_skills ps ON p.id = ps.project_id
+  LEFT JOIN skills s ON ps.skill_id = s.id
+  '.( ( $_SESSION['id'] != 1 ) ? 'WHERE p.user_id = '.$_SESSION['id'].' ' : 'LEFT JOIN users u ON p.user_id = u.id' ).'
+  GROUP BY p.id;';
 $result = mysqli_query( $connect, $query );
 
 ?>
@@ -42,6 +45,7 @@ $result = mysqli_query( $connect, $query );
       }
     ?>
     <th align="left">Description</th>
+    <th align="left">Skills</th>
     <th></th>
     <th></th>
     <th></th>
@@ -55,11 +59,19 @@ $result = mysqli_query( $connect, $query );
         }
       ?>
       <td align="left">
-        <?php echo htmlentities( $record['title'] ); ?>
+        <?php echo $record['title']; ?>
         <small><?php echo $record['content']; ?></small>
         <img src="image.php?type=project&id=<?php echo $record['id']; ?>&width=300&height=300&format=inside">
       </td>
-      <td align="center"><a href="projects_photo.php?id=<?php echo $record['id']; ?>">Photo</i></a></td>
+      <td align="center"><?php echo $record['skills']; ?></td>
+      <td align="center">
+        <a href="projects_photo.php?id=<?php echo $record['id']; ?>">Photo</i></a>
+        <?php 
+        if ( $_SESSION['id'] == 1 ) {
+          echo '<a href="projects_skill.php?id='.$record['id'].'">Skill</i></a>';
+        }
+        ?>
+      </td>
       <td align="center"><a href="projects_edit.php?id=<?php echo $record['id']; ?>">Edit</i></a></td>
       <td align="center">
         <a href="projects.php?delete=<?php echo $record['id']; ?>" onclick="javascript:confirm('Are you sure you want to delete this project?');">Delete</i></a>
