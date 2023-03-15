@@ -8,7 +8,7 @@ secure();
 
 if( isset( $_POST['title'] ) )
 {
-  
+
   if( $_POST['title'] and $_POST['content'] )
   {
     
@@ -26,6 +26,21 @@ if( isset( $_POST['title'] ) )
          "'.mysqli_real_escape_string( $connect, $_POST['github'] ).'"
       )';
     mysqli_query( $connect, $query );
+
+    if ( $_SESSION['id'] != 1 ) {
+      $query_skills = 'INSERT INTO projects_skills (
+        project_id,
+        skill_id
+      ) VALUES ';
+      $skills_length = count($_POST['skills']);
+      for ($i = 0; $i < $skills_length; $i++) {
+        if ($i != 0) {
+          $query_skills .= ',';
+        }
+        $query_skills .= '('.$connect->insert_id.', '.$_POST['skills'][$i].')';
+      }
+      mysqli_query( $connect, $query_skills );
+    }
     
     set_message( 'Project has been added' );
     
@@ -41,6 +56,12 @@ include( 'includes/header.php' );
 if ( $_SESSION['id'] == 1 ) {
   $query = 'SELECT *
     FROM users';
+  $result = mysqli_query( $connect, $query );
+}
+else {
+  $query = 'SELECT *
+  FROM skills 
+  WHERE user_id = '.$_SESSION['id'];
   $result = mysqli_query( $connect, $query );
 }
 
@@ -99,6 +120,21 @@ if ( $_SESSION['id'] == 1 ) {
   <input type="text" name="github" id="github">
   
   <br>
+
+  <?php
+
+  if ( $_SESSION['id'] != 1 ) {
+    echo '<label>Skills:</label><div class="skills-container">';
+    while( $record = mysqli_fetch_assoc( $result ) ):
+      echo '<div class="skills">';
+      echo '<input type="checkbox" name="skills[]" value="'.$record['id'].'" />';
+      echo '<label>'.$record['name'].'</label>';
+      echo '</div>';
+    endwhile;
+    echo '</div><br>';
+  }
+
+  ?>
   
   <input type="submit" value="Add Project">
   
