@@ -70,7 +70,7 @@ $result = mysqli_query( $connect, $query );
         <a href="projects_photo.php?id=<?php echo $record['id']; ?>">Photo</i></a>
         <?php 
         if ( $_SESSION['id'] == 1 ) {
-          echo '<a href="projects_skill.php?id='.$record['id'].'">Skill</i></a>';
+          echo '<a href="projects_skills.php?id='.$record['id'].'">Skill</i></a>';
         }
         ?>
       </td>
