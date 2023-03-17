@@ -24,6 +24,10 @@ if( isset( $_POST['first'] ) )
       first = "'.mysqli_real_escape_string( $connect, $_POST['first'] ).'",
       last = "'.mysqli_real_escape_string( $connect, $_POST['last'] ).'",
       email = "'.mysqli_real_escape_string( $connect, $_POST['email'] ).'",
+      location = "'.mysqli_real_escape_string( $connect, $_POST['location'] ).'",
+      mobile = "'.mysqli_real_escape_string( $connect, $_POST['mobile'] ).'",
+      linkedin = "'.mysqli_real_escape_string( $connect, $_POST['linkedin'] ).'",
+      github = "'.mysqli_real_escape_string( $connect, $_POST['github'] ).'",
       active = "'.$_POST['active'].'"
       WHERE id = '.$_GET['id'].'
       LIMIT 1';
@@ -96,6 +100,26 @@ include( 'includes/header.php' );
   
   <label for="password">Password:</label>
   <input type="password" name="password" id="password">
+  
+  <br>
+  
+  <label for="location">Location:</label>
+  <input type="text" name="location" id="location" value="<?php echo htmlentities( $record['location'] ); ?>">
+  
+  <br>
+  
+  <label for="mobile">Mobile:</label>
+  <input type="text" name="mobile" id="mobile" value="<?php echo htmlentities( $record['mobile'] ); ?>">
+  
+  <br>
+  
+  <label for="linkedin">LinkedIn:</label>
+  <input type="text" name="linkedin" id="linkedin" value="<?php echo htmlentities( $record['linkedin'] ); ?>">
+  
+  <br>
+  
+  <label for="github">GitHub:</label>
+  <input type="text" name="github" id="github" value="<?php echo htmlentities( $record['github'] ); ?>">
   
   <br>
   
