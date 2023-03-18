@@ -31,6 +31,21 @@ if( isset( $_POST['career'] ) )
       )';
     mysqli_query( $connect, $query );
     
+    if ( $_SESSION['id'] != 1 ) {
+      $query_skills = 'INSERT INTO career_skills (
+        career_id,
+        skills_id
+      ) VALUES ';
+      $skills_length = count($_POST['skills']);
+      for ($i = 0; $i < $skills_length; $i++) {
+        if ($i != 0) {
+          $query_skills .= ',';
+        }
+        $query_skills .= '('.$connect->insert_id.', '.$_POST['skills'][$i].')';
+      }
+      mysqli_query( $connect, $query_skills );
+    }
+
     set_message( 'Career has been added' );
     
   }
@@ -46,11 +61,17 @@ if ( $_SESSION['id'] == 1 ) {
   $query_user = 'SELECT *
     FROM users';
   $result_user = mysqli_query( $connect, $query_user );
+} else {
+  $query_skills = 'SELECT *
+  FROM skills 
+  WHERE user_id = '.$_SESSION['id'];
+  $result_skills = mysqli_query( $connect, $query_skills );
 }
 
-$query = 'SELECT *
+
+$query_career_type = 'SELECT *
   FROM career_type';
-$result = mysqli_query( $connect, $query );
+$result_career_type = mysqli_query( $connect, $query_career_type );
 
 ?>
 
@@ -100,9 +121,9 @@ $result = mysqli_query( $connect, $query );
 
     <?php
     
-    while( $record = mysqli_fetch_assoc( $result ) ):
-      echo '<option value="'.$record['career_type_id'].'"';
-      echo '>'.$record['career_type'].'</option>';
+    while( $record_career_type = mysqli_fetch_assoc( $result_career_type ) ):
+      echo '<option value="'.$record_career_type['career_type_id'].'"';
+      echo '>'.$record_career_type['career_type'].'</option>';
     endwhile;
     
     ?>
@@ -111,6 +132,21 @@ $result = mysqli_query( $connect, $query );
     
   <br>
   
+  <?php
+
+  if ( $_SESSION['id'] != 1 ) {
+    echo '<label>Skills:</label><div class="skills-container">';
+    while( $record_skills = mysqli_fetch_assoc( $result_skills ) ):
+      echo '<div class="skills">';
+      echo '<input type="checkbox" name="skills[]" value="'.$record_skills['id'].'" />';
+      echo '<label>'.$record_skills['name'].'</label>';
+      echo '</div>';
+    endwhile;
+    echo '</div><br>';
+  }
+
+  ?>
+
   <input type="submit" value="Add Career">
   
 </form>
