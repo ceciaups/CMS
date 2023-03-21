@@ -58,6 +58,12 @@ $result = mysqli_query( $connect, $query );
     <th align="center">Career Type</th>
     <th align="center">Skills</th>
     <th></th>
+    <?php
+      if ( $_SESSION['id'] == 1 ) {
+        echo '<th align="center"></th>';
+      }
+    ?>
+    <th></th>
     <th></th>
   </tr>
   <?php while( $record = mysqli_fetch_assoc( $result ) ): ?>
@@ -69,7 +75,8 @@ $result = mysqli_query( $connect, $query );
         }
       ?>
       <td align="left">
-        <?php echo $record['career']; ?>
+        <?php echo $record['career'].'<br/>'; ?>
+        <img src="image.php?type=career&id=<?php echo $record['career_id']; ?>&width=300&height=300&format=inside">
       </td>
       <td align="left">
         <?php echo $record['location']; ?>
@@ -84,6 +91,16 @@ $result = mysqli_query( $connect, $query );
         <?php echo $record['career_type']; ?>
       </td>
       <td align="center"><?php echo $record['skills']; ?></td>
+      <td align="center">
+        <a href="career_photo.php?id=<?php echo $record['career_id']; ?>">Photo</i></a>
+      </td>
+      <?php 
+      if ( $_SESSION['id'] == 1 ) {
+        echo '<td align="center">';
+        echo '<a href="career_skills.php?id='.$record['career_id'].'">Skill</i></a>';
+        echo '</td>';
+      }
+      ?>
       <td align="center"><a href="career_edit.php?id=<?php echo $record['career_id']; ?>">Edit</i></a></td>
       <td align="center">
         <?php
