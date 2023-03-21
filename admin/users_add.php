@@ -17,12 +17,20 @@ if( isset( $_POST['first'] ) )
         last,
         email,
         password,
+        location,
+        mobile,
+        linkedin,
+        github,
         active
       ) VALUES (
         "'.mysqli_real_escape_string( $connect, $_POST['first'] ).'",
         "'.mysqli_real_escape_string( $connect, $_POST['last'] ).'",
         "'.mysqli_real_escape_string( $connect, $_POST['email'] ).'",
         "'.md5( $_POST['password'] ).'",
+        "'.mysqli_real_escape_string( $connect, $_POST['location'] ).'",
+        "'.mysqli_real_escape_string( $connect, $_POST['mobile'] ).'",
+        "'.mysqli_real_escape_string( $connect, $_POST['linkedin'] ).'",
+        "'.mysqli_real_escape_string( $connect, $_POST['github'] ).'",
         "'.$_POST['active'].'"
       )';
     mysqli_query( $connect, $query );
@@ -68,6 +76,26 @@ include( 'includes/header.php' );
   
   <label for="password">Password:</label>
   <input type="password" name="password" id="password">
+  
+  <br> 
+
+  <label for="location">Location:</label>
+  <input type="text" name="location" id="location">
+  
+  <br>
+  
+  <label for="mobile">Mobile:</label>
+  <input type="text" name="mobile" id="mobile">
+  
+  <br>
+  
+  <label for="linkedin">LinkedIn:</label>
+  <input type="text" name="linkedin" id="linkedin">
+  
+  <br>
+  
+  <label for="github">GitHub:</label>
+  <input type="text" name="github" id="github">
   
   <br>
   

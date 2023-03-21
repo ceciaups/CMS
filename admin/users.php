@@ -37,7 +37,8 @@ $result = mysqli_query( $connect, $query );
   <tr>
     <th align="center">ID</th>
     <th align="left">Name</th>
-    <th align="left">Email</th>
+    <th align="left">Details</th>
+    <th></th>
     <th></th>
     <th></th>
     <th></th>
@@ -45,8 +46,21 @@ $result = mysqli_query( $connect, $query );
   <?php while( $record = mysqli_fetch_assoc( $result ) ): ?>
     <tr>
       <td align="center"><?php echo $record['id']; ?></td>
-      <td align="left"><?php echo htmlentities( $record['first'] ); ?> <?php echo htmlentities( $record['last'] ); ?></td>
-      <td align="left"><a href="mailto:<?php echo htmlentities( $record['email'] ); ?>"><?php echo htmlentities( $record['email'] ); ?></a></td>
+      <td align="left"><?php echo $record['first']; ?> <?php echo htmlentities( $record['last'] ); ?></td>
+      <td align="left">
+        Email: <a href="mailto:<?php echo $record['email']; ?>"><?php echo $record['email']; ?></a><br>
+        <?php if( $record['id'] != 1 ): ?>
+          Location: <?php echo $record['location']; ?><br>
+          Mobile: <?php echo $record['mobile']; ?><br>
+          LinkedIn: <a href="<?php echo $record['linkedin']; ?>"><?php echo $record['linkedin']; ?></a><br>
+          GitHub: <a href="<?php echo $record['github']; ?>"><?php echo $record['github']; ?></a><br>
+        <?php endif; ?>
+      </td>
+      <td align="center">
+        <?php if( $record['id'] != 1 ): ?>
+          <a href="users_pdf.php?id=<?php echo $record['id']; ?>">Resumé</a>
+        <?php endif; ?>
+      </td>
       <td align="center"><a href="users_edit.php?id=<?php echo $record['id']; ?>">Edit</a></td>
       <td align="center">
         <?php if( $_SESSION['id'] != $record['id'] ): ?>
