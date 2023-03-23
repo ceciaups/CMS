@@ -41,6 +41,19 @@ switch( $_GET['type'] )
     if( !$record['photo'] ) $record['photo'] = $camera;
     
     break;
+
+  case 'career':
+  
+    $query = 'SELECT photo 
+      FROM career
+      WHERE career_id = '.$_GET['id'].'
+      LIMIT 1';
+    $result = mysqli_query( $connect, $query );
+    $record = mysqli_fetch_assoc( $result );
+
+    if( !$record['photo'] ) $record['photo'] = $camera;
+    
+    break;
 }
 
 include 'includes/wideimage/WideImage.php';
