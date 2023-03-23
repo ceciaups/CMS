@@ -37,7 +37,7 @@ if( isset( $_POST['skills'] ) )
   endwhile;
 
   $skills_length = count($new_skills);
-  
+
   // Add new career-skills only if there is a new skill
   if ($skills_length) {
     $query_add_career_skills = 'INSERT INTO career_skills (
@@ -51,7 +51,7 @@ if( isset( $_POST['skills'] ) )
       $query_add_career_skills .= '('.$_GET['id'].', '.$new_skills[$i].')';
     }
 
-      mysqli_query( $connect, $query_add_career_skills );
+    mysqli_query( $connect, $query_add_career_skills );
 
   }
   
@@ -67,8 +67,8 @@ if( isset( $_GET['id'] ) )
   
   $query = 'SELECT c.career_id, c.career, c.location, c.start_date, c.end_date, c.user_id, GROUP_CONCAT(s.name SEPARATOR ", ") AS skills
     FROM career c
-    JOIN career_skills cs ON c.career_id = cs.career_id
-    JOIN skills s ON cs.skills_id = s.id
+    LEFT JOIN career_skills cs ON c.career_id = cs.career_id
+    LEFT JOIN skills s ON cs.skills_id = s.id
     WHERE c.career_id = '.$_GET['id'].'
     GROUP BY c.career_id 
     LIMIT 1';
