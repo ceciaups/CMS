@@ -31,19 +31,23 @@ if( isset( $_POST['career'] ) )
       )';
     mysqli_query( $connect, $query );
     
-    if ( $_SESSION['id'] != 1 ) {
-      $query_skills = 'INSERT INTO career_skills (
+    $skills_length = count($_POST['skills']);
+
+    // Add new career-skills only if there is a new skill
+    if ($skills_length) {
+      $query_add_career_skills = 'INSERT INTO career_skills (
         career_id,
         skills_id
       ) VALUES ';
-      $skills_length = count($_POST['skills']);
       for ($i = 0; $i < $skills_length; $i++) {
         if ($i != 0) {
-          $query_skills .= ',';
+          $query_add_career_skills .= ',';
         }
-        $query_skills .= '('.$connect->insert_id.', '.$_POST['skills'][$i].')';
+        $query_add_career_skills .= '('.$_GET['id'].', '.$$_POST['skills'][$i].')';
       }
-      mysqli_query( $connect, $query_skills );
+
+      mysqli_query( $connect, $query_add_career_skills );
+
     }
 
     set_message( 'Career has been added' );

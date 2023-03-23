@@ -28,9 +28,9 @@ $query = 'SELECT c.career_id, c.career, c.location, c.start_date, c.end_date, ct
   FROM career c
   JOIN career_type ct
   ON c.career_type_id = ct.career_type_id
-  JOIN career_skills cs
+  LEFT JOIN career_skills cs
   ON c.career_id = cs.career_id
-  JOIN skills s
+  LEFT JOIN skills s
   ON s.id = cs.skills_id
   '.( ( $_SESSION['id'] != 1 ) ? 'WHERE c.user_id = '.$_SESSION['id'].' ' : 'JOIN users u 
   ON c.user_id = u.id' ).'
