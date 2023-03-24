@@ -1,3 +1,8 @@
+<?php
+
+include( 'admin/includes/database.php' );
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -93,67 +98,97 @@
 				</div>
 				<h3 class="section-subtitle">Education</h3>
 				<div class="about-hover-cards-container">
-					<div
-						id="about-education-hkust"
-						class="flex-center hover-card flex-column"
-					>
-						<p>Bachelor’s Degree, Electronic and Computer Engineering</p>
-						<p>Minor in Information Technology</p>
-						<p>Hong Kong University of Science and Technology</p>
-						<p>2019 - 2020</p>
-						<p>- C++ / Java -</p>
-					</div>
-					<div
-						id="about-education-humber"
-						class="flex-center hover-card flex-column"
-					>
-						<p>Post-Graduate Certificate, Web Development</p>
-						<p>Humber College</p>
-						<p>2022 - 2023</p>
-						<p>- C# / ASP.NET / SQL / HTML / CSS / React / Javascript -</p>
-					</div>
+					<?php
+
+					$query = 'SELECT c.career_id, c.career, c.location, c.start_date, c.end_date, c.photo, GROUP_CONCAT(s.name SEPARATOR " / ") AS skills
+					FROM career c
+					JOIN career_skills cs
+					ON c.career_id = cs.career_id
+					JOIN skills s
+					ON s.id = cs.skills_id
+					WHERE c.user_id = 3
+					AND c.career_type_id = 1
+					GROUP BY c.career_id';
+					$result = mysqli_query( $connect, $query );
+					while( $record = mysqli_fetch_assoc( $result ) ):
+						echo '<div class="flex-center hover-card flex-column">';
+						/* https://international-sustainable-campus-network.org/membership/the-hong-kong-university-of-science-and-technology/ */
+						/* https://humber.ca/brand/humber-logo-sub-brand-logos */
+						echo '<img src='.$record['photo'].'>';
+						$career_start = strpos($record['career'], '(');
+						if ($career_start !== false) {
+							echo '<p>'.substr($record['career'], 0, $career_start).'</p>';
+							echo '<p>'.substr($record['career'], $career_start + 1, -1).'</p>';
+						} else {
+							echo '<p>'.$record['career'].'</p>';
+						}
+						echo '<p>'.$record['location'].'</p>';
+						$start_year = explode('-', $record['start_date'])[0];
+						$end_year = explode('-', $record['end_date'])[0];
+						echo '<p>'.$start_year.' - '.$end_year.'</p>';
+						echo '<p>- '.$record['skills'].' -</p>';
+						echo '</div>';
+					endwhile;
+
+					?>
 				</div>
 				<h3 class="section-subtitle">Experience</h3>
 				<div class="about-hover-cards-container">
-					<div
-						id="about-experience-asmpt"
-						class="flex-center hover-card flex-column"
-					>
-						<p>Embedded Software Engineer Intern</p>
-						<p>ASM Pacific Technology Limited</p>
-						<p>2019 - 2020</p>
-						<p>- C++ / C / C# -</p>
-					</div>
-					<div
-						id="about-experience-gense"
-						class="flex-center hover-card flex-column"
-					>
-						<p>Embedded Software Engineer</p>
-						<p>Gense Technologies Limited</p>
-						<p>2021 - 2022</p>
-						<p>- C++ / Python / HTML / CSS / React / Javascript -</p>
-					</div>
+					<?php
+
+					$query = 'SELECT c.career_id, c.career, c.location, c.start_date, c.end_date, c.photo, GROUP_CONCAT(s.name SEPARATOR " / ") AS skills
+					FROM career c
+					JOIN career_skills cs
+					ON c.career_id = cs.career_id
+					JOIN skills s
+					ON s.id = cs.skills_id
+					WHERE c.user_id = 3
+					AND c.career_type_id = 2
+					GROUP BY c.career_id';
+					$result = mysqli_query( $connect, $query );
+					while( $record = mysqli_fetch_assoc( $result ) ):
+						echo '<div class="flex-center hover-card flex-column">';
+						/* https://smt.asmpt.com/en/news-center/press/asm-pacific-technology-announces-2020-annual-results/ */
+						/* https://www.linkedin.com/company/gensetech/?originalSubdomain=hk */
+						echo '<img src='.$record['photo'].'>';
+						$career_start = strpos($record['career'], '(');
+						if ($career_start !== false) {
+							echo '<p>'.substr($record['career'], 0, $career_start - 1).'</p>';
+							echo '<p>'.substr($record['career'], $career_start, -1).'</p>';
+						} else {
+							echo '<p>'.$record['career'].'</p>';
+						}
+						echo '<p>'.$record['location'].'</p>';
+						$start_year = explode('-', $record['start_date'])[0];
+						$end_year = explode('-', $record['end_date'])[0];
+						echo '<p>'.$start_year.' - '.$end_year.'</p>';
+						echo '<p>- '.$record['skills'].'- </p>';
+						echo '</div>';
+					endwhile;
+
+					?>
 				</div>
 			</section>
 			<section id="projects">
 				<h2 class="section-title">Projects</h2>
 				<div id="projects-container">
 					<div id="projects-image-container">
-						<img
-							class="project-image"
-							src="images/projects/CT-volume-segmentation-SW.png"
-							alt="This is the CT volume segmentation software project image"
-						/>
-						<img
-							class="project-image"
-							src="images/projects/top-gun-maverick.png"
-							alt="This is the Top Gun: Maverick project image"
-						/>
-						<img
-							class="project-image"
-							src="images/projects/cross-the-bridge.png"
-							alt="This is the Cross The Bridge project image"
-						/>
+						<?php
+
+						$query = 'SELECT p.title, p.content, p.url, p.github, p.photo, GROUP_CONCAT(s.name SEPARATOR " / ") AS skills
+						FROM projects p
+						JOIN projects_skills ps
+						ON p.id = ps.project_id
+						JOIN skills s
+						ON s.id = ps.skill_id
+						WHERE p.user_id = 3
+						GROUP BY p.id';
+						$result = mysqli_query( $connect, $query );
+						while( $record = mysqli_fetch_assoc( $result ) ):
+							echo '<img class="project-image" src='.$record['photo'].' alt="This is the '.$record['title'].' project image">';
+						endwhile;
+
+						?>
 					</div>
 					<div id="projects-description-container">
 						<div id="project-number-container">
@@ -162,7 +197,30 @@
 						</div>
 						<div id="projects-description-content-container">
 							<div id="projects-description-content">
-								<div class="project-description">
+								<?php
+									$query = 'SELECT p.title, p.content, p.url, p.github, p.photo, GROUP_CONCAT(s.name SEPARATOR " / ") AS skills
+									FROM projects p
+									JOIN projects_skills ps
+									ON p.id = ps.project_id
+									JOIN skills s
+									ON s.id = ps.skill_id
+									WHERE p.user_id = 3
+									GROUP BY p.id';
+									$result = mysqli_query( $connect, $query );
+									while( $record = mysqli_fetch_assoc( $result ) ):
+										echo '<div class="project-description">';
+										echo '<h3 class="section-subtitle">'.$record['title'].'</h3>';
+										echo '<p>'.$record['content'].'</p>';
+										echo '<div class="project-description-links">';
+										if ($record['url']) {
+											echo '<a class="button" href="'.$record['url'].'" target="_blank">Visit</a>';
+										}
+										echo '<a class="logo github-logo" href="'.$record['github'].'" target="_blank"></a>';
+										echo '</div>'; // end of project-description-links div
+										echo '</div>'; // end of project-description div
+									endwhile;
+								?>
+								<!-- <div class="project-description">
 									<h3 class="section-subtitle">CT Image Segmentation</h3>
 									<p>
 										This is the Final Year Project of my Bachelor’s program in
@@ -206,7 +264,7 @@
 											target="_blank"
 										></a>
 									</div>
-								</div>
+								</div> -->
 							</div>
 							<div id="projects-description-arrows">
 								<button
@@ -223,69 +281,20 @@
 				<h2 class="section-title">Skills</h2>
 				<div id="skills-content-container">
 					<div id="hard-skills-container" class="flex-center">
-						<div class="hard-skills-content">
-							<img
-								alt="This is the C++ skill icon"
-								src="images/skills/cpp.png"
-							/>
-							<p>C++</p>
-						</div>
-						<div class="hard-skills-content">
-							<img
-								alt="This is the C# skill icon"
-								src="images/skills/csharp.png"
-							/>
-							<p>C#</p>
-						</div>
-						<div class="hard-skills-content">
-							<img
-								alt="This is the Python skill icon"
-								src="images/skills/python.png"
-							/>
-							<p>Python</p>
-						</div>
-						<div class="hard-skills-content">
-							<img
-								alt="This is the HTML skill icon"
-								src="images/skills/html.png"
-							/>
-							<p>HTML</p>
-						</div>
-						<div class="hard-skills-content">
-							<img
-								alt="This is the CSS skill icon"
-								src="images/skills/css.png"
-							/>
-							<p>CSS</p>
-						</div>
-						<div class="hard-skills-content">
-							<img
-								alt="This is the Javascript skill icon"
-								src="images/skills/javascript.png"
-							/>
-							<p>Javascript</p>
-						</div>
-						<div class="hard-skills-content">
-							<img
-								alt="This is the MySQL skill icon"
-								src="images/skills/mysql.png"
-							/>
-							<p>MySQL</p>
-						</div>
-						<div class="hard-skills-content">
-							<img
-								alt="This is the ASP.NET skill icon"
-								src="images/skills/asp.png"
-							/>
-							<p>ASP.NET</p>
-						</div>
-						<div class="hard-skills-content">
-							<img
-								alt="This is the Java skill icon"
-								src="images/skills/java.png"
-							/>
-							<p>Java</p>
-						</div>
+						<?php
+
+						$query = 'SELECT s.name, s.user_id, s.photo
+						FROM skills s
+						WHERE s.user_id = 3';
+						$result = mysqli_query( $connect, $query );
+						while( $record = mysqli_fetch_assoc( $result ) ):
+							echo '<div class="hard-skills-content">';
+							echo '<img alt="This is the '.$record['name'].' skill icon" src='.$record['photo'].'>';
+							echo '<p>'.$record['name'].'</p>';
+							echo '</div>';
+						endwhile;
+
+						?>
 					</div>
 				</div>
 				<div class="separating-line"></div>
